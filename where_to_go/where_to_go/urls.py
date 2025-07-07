@@ -23,8 +23,8 @@ from .views import index, place_details
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
-    path('places/<int:place_id>/', place_details),
+    path('', index, name='index'),
+    path('places/<int:place_id>/', place_details, name='place_details'),
 ]
 
 if settings.DEBUG:
