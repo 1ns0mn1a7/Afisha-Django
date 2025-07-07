@@ -20,10 +20,12 @@ class PlaceImage(models.Model):
         verbose_name="Место",
     )
     image = models.ImageField("Картинка", upload_to='places')
-    position = models.PositiveIntegerField("Порядок", default=0)
+    position = models.PositiveIntegerField("Позиция", default=0)
 
     class Meta:
         ordering = ['position']
+        verbose_name = "Фотография"
+        verbose_name_plural = "Фотографии"
 
     def __str__(self):
         return f"{self.place.title} — {self.position}"

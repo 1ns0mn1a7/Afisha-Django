@@ -1,10 +1,21 @@
 from django.contrib import admin
 from .models import Place, PlaceImage
+from django.utils.html import format_html
 
 
 class PlaceImageInline(admin.TabularInline):
     model = PlaceImage
     extra = 1
+    readonly_fields = ["preview"]
+    fields = ["image", "preview", "position"]
+
+    def preview(self, obj):
+        try:
+            if obj.image:
+                return format_html('<img src="{}" style="max-height: 200px;" />', obj.image.url)
+        except Exception as e:
+            print(f"[PREVIEW ERROR] {e}")
+        return "—"
 
 
 @admin.register(Place)
@@ -15,4 +26,4 @@ class PlaceAdmin(admin.ModelAdmin):
 
 @admin.register(PlaceImage)
 class PlaceImageAdmin(admin.ModelAdmin):
-    list_display = ("place", "position")
+    list_display = ("place", "position") 
