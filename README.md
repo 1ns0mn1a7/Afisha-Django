@@ -8,6 +8,8 @@
   <img src="preview.png" alt="Превью" width="600" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); border-radius: 8px;" />
 </p>
 
+[Демо сайта](https://devmanorg.github.io/where-to-go-frontend/).
+
 ## Возможности
 
 - Интерактивная карта с точками локаций.
