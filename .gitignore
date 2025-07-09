@@ -181,3 +181,4 @@ cython_debug/
 .cursorindexingignore
 # Media files
 where_to_go/media/places/
+.DS_Store
