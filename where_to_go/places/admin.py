@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Place, PlaceImage
 from django.utils.html import format_html
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
+from django.conf import settings
 
 
 class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -22,9 +23,11 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
 @admin.register(Place)
 class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
     list_display = ("title",)
+    search_fields = ("title",)
     inlines = [PlaceImageInline]
 
 
-@admin.register(PlaceImage)
-class PlaceImageAdmin(admin.ModelAdmin):
-    list_display = ("place", "position") 
+if settings.DEBUG:
+    @admin.register(PlaceImage)
+    class PlaceImageAdmin(admin.ModelAdmin):
+        list_display = ("place", "position")

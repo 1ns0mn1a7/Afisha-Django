@@ -9,6 +9,10 @@ class Place(models.Model):
     longitude = models.FloatField("Долгота", blank=True, null=True)
     latitude = models.FloatField("Широта", blank=True, null=True)
 
+    class Meta:
+        verbose_name = "Место"
+        verbose_name_plural = "Места"
+
     def __str__(self):
         return self.title
     
