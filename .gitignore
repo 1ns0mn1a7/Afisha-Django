@@ -180,4 +180,4 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 # Media files
-.where_to_go/media
+where_to_go/media/places/
