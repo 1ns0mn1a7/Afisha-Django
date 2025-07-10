@@ -65,6 +65,8 @@ python manage.py runserver
 - Админка: http://127.0.0.1:8000/admin/
 
 ### Переменные окружения
+Проект использует библиотеку [environs](https://github.com/sloria/environs) для чтения настроек из `.env`.
+
 Создайте файл `.env`:
 ```env
 DEBUG=True
@@ -83,6 +85,7 @@ ALLOWED_HOSTS=127.0.0.1,localhost
 - `adminsortable2` — сортировка фотографий
 - `django-tinymce` — WYSIWYG редактор
 - `requests` - для парсинга данных из JSON (Django команда)
+- `environs` - для чтения из `.env`
 
 ### Демо
 Чтобы добавить тестовые локации:
