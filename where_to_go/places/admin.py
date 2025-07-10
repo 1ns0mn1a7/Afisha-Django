@@ -16,9 +16,12 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
     def preview(self, obj):
         try:
             if obj.image:
-                return format_html('<img src="{}" style="max-height: 200px;" />', obj.image.url)
-        except Exception as e:
-            print(f"[PREVIEW ERROR] {e}")
+                return format_html(
+                    "<img src='{}' style='max-height: 200px;' />", 
+                    obj.image.url
+                )
+        except Exception as error:
+            print(f"[PREVIEW ERROR] {error}")
         return "—"
 
 
