@@ -19,7 +19,7 @@ def fetch_with_retries(url, retries=3, delay=2):
         except requests.exceptions.RequestException as error:
             print(f"[WARNING] Ошибка запроса: {error} (попытка {attempt + 1}/{retries})")
             time.sleep(delay)
-    raise ConnectionError(f"Не удалось получить данные с {url} после {retries} попыток.")
+    return None
 
 
 class Command(BaseCommand):
@@ -53,12 +53,19 @@ class Command(BaseCommand):
             return
 
         for index, img_url in enumerate(place_json.get("imgs", [])):
-            img_response = fetch_with_retries(img_url)
-            img_name = os.path.basename(urlsplit(img_url).path)
-            PlaceImage.objects.create(
-                place=place,
-                position=index,
-                image=ContentFile(img_response.content, name=img_name)
-            )
+            try:
+                img_response = fetch_with_retries(img_url)
+                img_name = os.path.basename(urlsplit(img_url).path)
+
+                PlaceImage.objects.create(
+                    place=place,
+                    position=index,
+                    image=ContentFile(img_response.content, name=img_name)
+                )
+            except requests.exceptions.RequestException as error:
+                self.stderr.write(self.style.ERROR(
+                    f"[Ошибка] Не удалось загрузить изображение: {img_url}\nПричина: {error}"
+                ))
+                continue
 
         self.stdout.write(self.style.SUCCESS(f"Загружено место: {place.title}"))
