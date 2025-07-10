@@ -13,12 +13,26 @@ def fetch_with_retries(url, retries=3, delay=2):
     }
     for attempt in range(retries):
         try:
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=10)
             response.raise_for_status()
             return response
-        except requests.exceptions.RequestException as error:
-            print(f"[WARNING] Ошибка запроса: {error} (попытка {attempt + 1}/{retries})")
+        
+        except requests.exceptions.HTTPError as http_error:
+            print(f"[HTTP ERROR] {http_error} — URL: {url}")
+            break
+
+        except requests.exceptions.ConnectionError as connection_error:
+            print(f"[CONNECTION ERROR] {connection_error} — URL: {url} (попытка {attempt + 1}/{retries})")
             time.sleep(delay)
+
+        except requests.exceptions.Timeout as timeout_error:
+            print(f"[TIMEOUT ERROR] {timeout_error} — URL: {url} (попытка {attempt + 1}/{retries})")
+            time.sleep(delay)
+
+        except requests.exceptions.RequestException as request_error:
+            print(f"[REQUEST ERROR] {request_error} — URL: {url} (попытка {attempt + 1}/{retries})")
+            time.sleep(delay)
+        
     return None
 
 
