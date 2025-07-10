@@ -36,3 +36,5 @@ if settings.DEBUG:
     @admin.register(PlaceImage)
     class PlaceImageAdmin(admin.ModelAdmin):
         list_display = ("place", "position")
+        autocomplete_fields = ["place"]
+        
