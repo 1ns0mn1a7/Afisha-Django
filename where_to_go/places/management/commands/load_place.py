@@ -9,7 +9,7 @@ from places.models import Place, PlaceImage
 
 def fetch_with_retries(url, retries=3, delay=2):
     headers = {
-        'User-Agent': 'Mozilla/5.0 (compatible; MyDjangoBot/1.0)'
+        "User-Agent": "Mozilla/5.0 (compatible; MyDjangoBot/1.0)"
     }
     for attempt in range(retries):
         try:
@@ -23,13 +23,13 @@ def fetch_with_retries(url, retries=3, delay=2):
 
 
 class Command(BaseCommand):
-    help = 'Загружаем данные из JSON по ссылке'
+    help = "Загружаем данные из JSON по ссылке"
 
     def add_arguments(self, parser):
-        parser.add_argument('json_url', type=str)
+        parser.add_argument("json_url", type=str)
 
     def handle(self, *args, **options):
-        json_url = options['json_url']
+        json_url = options["json_url"]
         response = fetch_with_retries(json_url)
 
         try:
@@ -39,23 +39,23 @@ class Command(BaseCommand):
             return
 
         place, created = Place.objects.get_or_create(
-            title=place_info['title'],
+            title=place_info["title"],
             defaults={
-                'short_description': place_info.get('description_short', ''),
-                'long_description': place_info.get('description_long', ''),
-                'longitude': place_info['coordinates']['lng'],
-                'latitude': place_info['coordinates']['lat'],
+                "short_description": place_info.get("description_short", ""),
+                "long_description": place_info.get("description_long", ""),
+                "longitude": place_info["coordinates"]["lng"],
+                "latitude": place_info["coordinates"]["lat"],
             }
         )
 
         if not created:
-            self.stdout.write(self.style.WARNING(f'Место "{place.title}" уже существует. Пропускаем загрузку.'))
+            self.stdout.write(self.style.WARNING(f"Место '{place.title}' уже существует. Пропускаем загрузку."))
             return
 
-        for index, img_url in enumerate(place_info.get('imgs', [])):
+        for index, img_url in enumerate(place_info.get("imgs", [])):
             img_response = fetch_with_retries(img_url)
             img_name = os.path.basename(urlsplit(img_url).path)
             image = PlaceImage(place=place, position=index)
             image.image.save(img_name, ContentFile(img_response.content), save=True)
 
-        self.stdout.write(self.style.SUCCESS(f'Загружено место: {place.title}'))
+        self.stdout.write(self.style.SUCCESS(f"Загружено место: {place.title}"))
