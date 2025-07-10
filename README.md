@@ -71,6 +71,11 @@ DEBUG=True
 SECRET_KEY=your-secret-key
 ALLOWED_HOSTS=127.0.0.1,localhost
 ```
+
+- `DEBUG` — включает режим отладки (только для разработки).
+- `SECRET_KEY` — секретный ключ Django, нужен для безопасности.
+- `ALLOWED_HOSTS` — список доменов, с которых разрешены запросы.
+
 ### Зависимости
 - Python 3.10+
 - Django 5.2
