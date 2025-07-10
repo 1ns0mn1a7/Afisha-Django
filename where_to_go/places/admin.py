@@ -7,6 +7,9 @@ from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 from .models import Place, PlaceImage
 
 
+IMAGE_PREVIEW_MAX_HEIGHT_PX = 200
+
+
 class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
     model = PlaceImage
     extra = 1
@@ -17,7 +20,7 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
         try:
             if obj.image:
                 return format_html(
-                    "<img src='{}' style='max-height: 200px;' />", 
+                    f"<img src='{{}}' style='max-height: {IMAGE_PREVIEW_MAX_HEIGHT_PX}px;' />",
                     obj.image.url
                 )
         except Exception as error:
@@ -37,4 +40,3 @@ if settings.DEBUG:
     class PlaceImageAdmin(admin.ModelAdmin):
         list_display = ("place", "position")
         autocomplete_fields = ["place"]
-        
