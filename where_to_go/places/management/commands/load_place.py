@@ -47,18 +47,18 @@ class Command(BaseCommand):
         response = fetch_with_retries(json_url)
 
         try:
-            place_json = response.json()
+            place_fields = response.json()
         except requests.exceptions.JSONDecodeError as error:
             self.stderr.write(self.style.ERROR(f"Ошибка парсинга JSON: {error}"))
             return
 
         place, created = Place.objects.get_or_create(
-            title=place_json["title"],
+            title=place_fields["title"],
             defaults={
-                "short_description": place_json.get("description_short", ""),
-                "long_description": place_json.get("description_long", ""),
-                "longitude": place_json["coordinates"]["lng"],
-                "latitude": place_json["coordinates"]["lat"],
+                "short_description": place_fields.get("description_short", ""),
+                "long_description": place_fields.get("description_long", ""),
+                "longitude": place_fields["coordinates"]["lng"],
+                "latitude": place_fields["coordinates"]["lat"],
             }
         )
 
@@ -66,7 +66,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING(f"Место '{place.title}' уже существует. Пропускаем загрузку."))
             return
 
-        for index, img_url in enumerate(place_json.get("imgs", [])):
+        for index, img_url in enumerate(place_fields.get("imgs", [])):
             try:
                 img_response = fetch_with_retries(img_url)
                 img_name = os.path.basename(urlsplit(img_url).path)
