@@ -8,6 +8,7 @@ from .models import Place, PlaceImage
 
 
 IMAGE_PREVIEW_MAX_HEIGHT_PX = 200
+IMAGE_PREVIEW_MAX_WIDTH_PX = 300
 
 
 class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -20,8 +21,10 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
         try:
             if obj.image:
                 return format_html(
-                    f"<img src='{{}}' style='max-height: {IMAGE_PREVIEW_MAX_HEIGHT_PX}px;' />",
-                    obj.image.url
+                    "<img src='{}' style='max-height:{}px; max-width:{}px;' />",
+                    obj.image.url,
+                    IMAGE_PREVIEW_MAX_HEIGHT_PX,
+                    IMAGE_PREVIEW_MAX_WIDTH_PX
                 )
         except Exception as error:
             print(f"[PREVIEW ERROR] {error}")
